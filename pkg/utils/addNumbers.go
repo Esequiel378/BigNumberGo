@@ -1,8 +1,7 @@
-package main
+package utils
 
 import (
 	"fmt"
-	"log"
 )
 
 // AddNumbers takse two string params containing M numbers
@@ -20,16 +19,7 @@ import (
 //  "123456789012358024579 234567890123480245801"
 //
 //  >> AddNumbers("1234567.8901 2.345", "12.34 2345678901.2")
-//  "1234580.2301 2345678903.545"
+//  "1234582.2301 2345678903.545"
 func AddNumbers(lhs, rhs string) (string, error) {
 	return "", fmt.Errorf("AddNumbers not implemented")
-}
-
-func main() {
-	result, err := AddNumbers("123 456 789", "11 22 33")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("result:", result)
 }
