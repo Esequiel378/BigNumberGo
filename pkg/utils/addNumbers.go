@@ -6,7 +6,10 @@ import (
 	"strings"
 )
 
-var ErrInputWithDifferentNumbersCount = errors.New("input with different numbers count")
+var (
+	ErrInputWithDifferentNumbersCount = errors.New("input with different numbers count")
+	ErrInvalidCarryValue              = errors.New("invalid carry value")
+)
 
 // AddNumbers takse two string params containing M numbers
 // separated by spaces and returns sum of the pairs.
@@ -128,10 +131,24 @@ func WithCarry(carry int) AddTwoStringNumbersOptions {
 	}
 }
 
-// addTwoStringNumbers adds two string numbers and returns the result with the carry
+// addTwoStringNumbers adds two integers numbers from a string
+// and returns the result with the carry of the last digits
+// The numbers must not include decimal places.
+//
+// Examples:
+//  >> addTwoStringNumbers("123", "456")
+//  "579", 0, nil
+//
+//  >> addTwoStringNumbers("99", "9")
+//  "08", 1, nil
 func addTwoStringNumbers(lhs, rhs string, opts ...AddTwoStringNumbersOptions) (zero string, carry int, err error) {
+	// TODO: Add validation for the input
 	for _, opt := range opts {
 		lhs, rhs, carry = opt(lhs, rhs, carry)
+	}
+
+	if carry < 0 || carry > 1 {
+		return zero, carry, ErrInvalidCarryValue
 	}
 
 	// Make sure that lhs is the largest number
