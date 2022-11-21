@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -9,6 +10,9 @@ import (
 var (
 	ErrInputWithDifferentNumbersCount = errors.New("input with different numbers count")
 	ErrInvalidCarryValue              = errors.New("invalid carry value")
+	ErrInvalidInputNumber             = errors.New("invalid input number")
+	ErrInvalidIntegerNumber           = errors.New("invalid integer number")
+	ErrInvalidDecimalNumber           = errors.New("invalid decimal number")
 )
 
 // AddNumbers takse two string params containing M numbers
@@ -54,14 +58,44 @@ func AddNumbers(lhs, rhs string) (zero string, err error) {
 	return resultString, nil
 }
 
-// addDecimalStringNumbers adds the decimal part of two string numbers and returns the result with the carry
-func addDecimalStringNumbers(lhs, rhs string) (zero string, carry int, err error) {
-	_, lhsDecimal, lhsDecimalFound := strings.Cut(lhs, ".")
-	_, rhsDecimal, rhsDecimalFound := strings.Cut(rhs, ".")
+// InputNumberMatch is a regex that matches an integer or decimal number
+// Ex: 123, 123.456, 123.456789
+//
+// [101 reference](https://regex101.com/r/SuRnhV/1)
+const InputNumberMatch = "^[0-9]*[.]?[0-9]+?$"
 
-	if !lhsDecimalFound && !rhsDecimalFound {
-		return zero, carry, nil
+// addStringNumbers adds two string numbers and returns the result
+// The numbers may include decimal places.
+//
+// Examples
+//  >> addStringNumbers("123", "11") "134"
+//
+//  >> addStringNumbers("123456789012345678901", "12345678")
+//  "123456789012358024579"
+//
+//  >> addStringNumbers("1234567.8901", "12.34")
+//  "1234582.2301"
+func addStringNumbers(lhs, rhs string) (zero string, err error) {
+	var match bool
+
+	// Validate lhs input value
+	if match, err = regexp.MatchString(InputNumberMatch, lhs); !match || err != nil {
+		return zero, ErrInvalidInputNumber
 	}
+
+	// Validate rhs input value
+	if match, err = regexp.MatchString(InputNumberMatch, rhs); !match || err != nil {
+		return zero, ErrInvalidInputNumber
+	}
+
+	// Make sure that lhs is the largest number
+	if len(lhs) < len(rhs) {
+		lhs, rhs = rhs, lhs
+	}
+
+	// Get the integer part of the numbers
+	lhs, lhsDecimal, lhsFound := strings.Cut(lhs, ".")
+	rhs, rhsDecimal, rhsFound := strings.Cut(rhs, ".")
 
 	// Make sure that lhs is the largest number
 	if len(lhsDecimal) < len(rhsDecimal) {
@@ -71,34 +105,16 @@ func addDecimalStringNumbers(lhs, rhs string) (zero string, carry int, err error
 	// Fill the missing decimal part with zeros
 	rhsDecimal += strings.Repeat("0", len(lhsDecimal)-len(rhsDecimal))
 
-	var result string
+	var carry int
+	var decimal string
 
 	// Compute the sum of the decimal part
-	result, carry, err = addTwoStringNumbers(lhsDecimal, rhsDecimal)
-	if err != nil {
-		return zero, carry, err
+	if lhsFound && rhsFound {
+		decimal, carry, err = addTwoStringNumbers(lhsDecimal, rhsDecimal)
+		if err != nil {
+			return zero, err
+		}
 	}
-
-	return result, carry, nil
-}
-
-// addStringNumbers adds two string numbers and returns the result
-// The numbers may include decimal places.
-func addStringNumbers(lhs, rhs string) (zero string, err error) {
-	// Make sure that lhs is the largest number
-	if len(lhs) < len(rhs) {
-		lhs, rhs = rhs, lhs
-	}
-
-	// compute decimal addition
-	decimal, carry, err := addDecimalStringNumbers(lhs, rhs)
-	if err != nil {
-		return zero, err
-	}
-
-	// Get the integer part of the numbers
-	lhs, _, _ = strings.Cut(lhs, ".")
-	rhs, _, _ = strings.Cut(rhs, ".")
 
 	// compute addition
 	result, carry, err := addTwoStringNumbers(lhs, rhs, WithCarry(carry))
@@ -131,6 +147,12 @@ func WithCarry(carry int) AddTwoStringNumbersOptions {
 	}
 }
 
+// IntegerNumberMatch is a regex that matches an integer number (without decimal places)
+// Ex: 123, 123456789012345678901234567890
+//
+// [101 reference](https://regex101.com/r/3hoFC3/1)
+const IntegerNumberMatch = "^[0-9]+$"
+
 // addTwoStringNumbers adds two integers numbers from a string
 // and returns the result with the carry of the last digits
 // The numbers must not include decimal places.
@@ -142,7 +164,18 @@ func WithCarry(carry int) AddTwoStringNumbersOptions {
 //  >> addTwoStringNumbers("99", "9")
 //  "08", 1, nil
 func addTwoStringNumbers(lhs, rhs string, opts ...AddTwoStringNumbersOptions) (zero string, carry int, err error) {
-	// TODO: Add validation for the input
+	var match bool
+
+	// Validate lhs input value
+	if match, err = regexp.MatchString(IntegerNumberMatch, lhs); !match || err != nil {
+		return zero, carry, ErrInvalidIntegerNumber
+	}
+
+	// Validate rhs input value
+	if match, err = regexp.MatchString(IntegerNumberMatch, rhs); !match || err != nil {
+		return zero, carry, ErrInvalidIntegerNumber
+	}
+
 	for _, opt := range opts {
 		lhs, rhs, carry = opt(lhs, rhs, carry)
 	}
