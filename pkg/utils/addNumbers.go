@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"strconv"
 	"strings"
 )
 
@@ -50,13 +51,62 @@ func AddNumbers(lhs, rhs string) (zero string, err error) {
 	return resultString, nil
 }
 
-func addStringNumbers(lhs, rhs string) (string, error) {
-	// TODO:
-	// 1. Make sure that len(lhs) >= len(rhs)
-	// 2. Split lhs and rhs into two parts: integer and decimal
-	// 3. Iterate over len(lhs) from right to left
-	// 4. Get index values for lhs and rhs
-	// 6. If the sum is greater than 10, then set the carry to 1
-	// 7. Add the sum to the result
-	return "", nil
+func addStringNumbers(lhs, rhs string) (zero string, err error) {
+	// TODO: Implement decimal addition
+	if strings.Contains(lhs, ".") || strings.Contains(rhs, ".") {
+		return "", errors.New("not implemented")
+	}
+
+	// Make sure that lhs is the largest number
+	if len(lhs) < len(rhs) {
+		lhs, rhs = rhs, lhs
+	}
+
+	result := make([]string, len(lhs))
+	carry := 0
+
+	// Iterate from the end of the string
+	for idx := 1; idx <= len(lhs); idx++ {
+		// String numbers to compute sum
+		var lhsStr, rhsStr string
+
+		// Get the current digit from the lhs string
+		lhsStr = string(lhs[len(lhs)-idx])
+		// rhsStr may not exist if the number is shorter than lhs
+		// N + 0 = N
+		rhsStr = "0"
+
+		// If exists, get the current digit from the rhs string
+		if len(rhs)-idx >= 0 {
+			rhsStr = string(rhs[len(rhs)-idx])
+		}
+
+		// Int numbers to compute sum
+		var lhsValue, rhsValue int
+
+		// Convert lhsValue to int
+		lhsValue, err = strconv.Atoi(lhsStr)
+		if err != nil {
+			return zero, err
+		}
+
+		// Convert rhsValue to int
+		rhsValue, err = strconv.Atoi(rhsStr)
+		if err != nil {
+			return zero, err
+		}
+
+		// Compute sum with carry
+		sum := carry + lhsValue + rhsValue
+		// Compute carry for the next iteration
+		carry = sum / 10
+
+		// Store the result
+		result[len(lhs)-idx] = strconv.Itoa(sum % 10)
+	}
+
+	// Join the result to a string
+	resultStr := strings.Join(result, "")
+
+	return resultStr, nil
 }

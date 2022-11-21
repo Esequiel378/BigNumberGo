@@ -40,12 +40,12 @@ func Test(t *testing.T) {
 
 		t.Run(testname, func(t *testing.T) {
 			got, err := AddNumbers(tc.lhs, tc.rhs)
-			if errors.Is(err, tc.err) {
-				t.Errorf("got error %v, want %v", err, tc.err)
+			if !errors.Is(err, tc.err) {
+				t.Errorf("got error `%v`, want `%v`", err, tc.err)
 			}
 
 			if got != tc.want {
-				t.Errorf("got %s, want %s", got, tc.want)
+				t.Errorf("got `%s`, want `%s`", got, tc.want)
 			}
 		})
 	}
