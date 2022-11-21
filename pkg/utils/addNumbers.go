@@ -105,6 +105,11 @@ func addStringNumbers(lhs, rhs string) (zero string, err error) {
 		result[len(lhs)-idx] = strconv.Itoa(sum % 10)
 	}
 
+	// If there is a carry left, add it to the result
+	if carry > 0 {
+		result = append([]string{strconv.Itoa(carry)}, result...)
+	}
+
 	// Join the result to a string
 	resultStr := strings.Join(result, "")
 
