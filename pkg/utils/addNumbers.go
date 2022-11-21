@@ -51,10 +51,87 @@ func AddNumbers(lhs, rhs string) (zero string, err error) {
 	return resultString, nil
 }
 
+// addDecimalStringNumbers adds the decimal part of two string numbers and returns the result with the carry
+func addDecimalStringNumbers(lhs, rhs string) (zero string, carry int, err error) {
+	_, lhsDecimal, lhsDecimalFound := strings.Cut(lhs, ".")
+	_, rhsDecimal, rhsDecimalFound := strings.Cut(rhs, ".")
+
+	if !lhsDecimalFound && !rhsDecimalFound {
+		return zero, carry, nil
+	}
+
+	// Make sure that lhs is the largest number
+	if len(lhsDecimal) < len(rhsDecimal) {
+		lhsDecimal, rhsDecimal = rhsDecimal, lhsDecimal
+	}
+
+	// Fill the missing decimal part with zeros
+	rhsDecimal += strings.Repeat("0", len(lhsDecimal)-len(rhsDecimal))
+
+	var result string
+
+	// Compute the sum of the decimal part
+	result, carry, err = addTwoStringNumbers(lhsDecimal, rhsDecimal)
+	if err != nil {
+		return zero, carry, err
+	}
+
+	return result, carry, nil
+}
+
+// addStringNumbers adds two string numbers and returns the result
+// The numbers may include decimal places.
 func addStringNumbers(lhs, rhs string) (zero string, err error) {
-	// TODO: Implement decimal addition
-	if strings.Contains(lhs, ".") || strings.Contains(rhs, ".") {
-		return "", errors.New("not implemented")
+	// Make sure that lhs is the largest number
+	if len(lhs) < len(rhs) {
+		lhs, rhs = rhs, lhs
+	}
+
+	// compute decimal addition
+	decimal, carry, err := addDecimalStringNumbers(lhs, rhs)
+	if err != nil {
+		return zero, err
+	}
+
+	// Get the integer part of the numbers
+	lhs, _, _ = strings.Cut(lhs, ".")
+	rhs, _, _ = strings.Cut(rhs, ".")
+
+	// compute addition
+	result, carry, err := addTwoStringNumbers(lhs, rhs, WithCarry(carry))
+	if err != nil {
+		return zero, err
+	}
+
+	// If there is a carry left, add it to the result
+	if carry > 0 {
+		// Carry can be only 1
+		result = "1" + result
+	}
+
+	if len(decimal) > 0 {
+		result += "." + decimal
+	}
+
+	return result, nil
+}
+
+// AddTwoStringNumbersOptions is a function that can be used to modify the behaviour of addTwoStringNumbers
+//
+// This is based on the [Option Pattern  in Golang](https://blog.damavis.com/en/option-pattern-in-golang)
+type AddTwoStringNumbersOptions = func(lhs, rhs string, carry int) (string, string, int)
+
+// WithCarry is an option that can be used to add a initial carry to the addition
+func WithCarry(carry int) AddTwoStringNumbersOptions {
+	return func(lhs, rhs string, _ int) (string, string, int) {
+		return lhs, rhs, carry
+	}
+}
+
+// addTwoStringNumbers adds two string numbers and returns the result with the carry
+func addTwoStringNumbers(lhs, rhs string, opts ...AddTwoStringNumbersOptions) (zero string, carry int, err error) {
+	for _, opt := range opts {
+		lhs, rhs, carry = opt(lhs, rhs, carry)
 	}
 
 	// Make sure that lhs is the largest number
@@ -62,8 +139,8 @@ func addStringNumbers(lhs, rhs string) (zero string, err error) {
 		lhs, rhs = rhs, lhs
 	}
 
+	// result store the digits of the sum
 	result := make([]string, len(lhs))
-	carry := 0
 
 	// Iterate from the end of the string
 	for idx := 1; idx <= len(lhs); idx++ {
@@ -73,7 +150,7 @@ func addStringNumbers(lhs, rhs string) (zero string, err error) {
 		// Get the current digit from the lhs string
 		lhsStr = string(lhs[len(lhs)-idx])
 		// rhsStr may not exist if the number is shorter than lhs
-		// N + 0 = N
+		// X + 0 = X
 		rhsStr = "0"
 
 		// If exists, get the current digit from the rhs string
@@ -87,13 +164,13 @@ func addStringNumbers(lhs, rhs string) (zero string, err error) {
 		// Convert lhsValue to int
 		lhsValue, err = strconv.Atoi(lhsStr)
 		if err != nil {
-			return zero, err
+			return zero, carry, err
 		}
 
 		// Convert rhsValue to int
 		rhsValue, err = strconv.Atoi(rhsStr)
 		if err != nil {
-			return zero, err
+			return zero, carry, err
 		}
 
 		// Compute sum with carry
@@ -105,13 +182,7 @@ func addStringNumbers(lhs, rhs string) (zero string, err error) {
 		result[len(lhs)-idx] = strconv.Itoa(sum % 10)
 	}
 
-	// If there is a carry left, add it to the result
-	if carry > 0 {
-		result = append([]string{strconv.Itoa(carry)}, result...)
-	}
-
-	// Join the result to a string
 	resultStr := strings.Join(result, "")
 
-	return resultStr, nil
+	return resultStr, carry, nil
 }
