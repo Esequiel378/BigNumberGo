@@ -3,11 +3,11 @@
 #### ✅ Run tests
 
 ```shell
-$ go test ./...
+go test ./...
 ```
 
 #### 📈 Run tests coverage
 
 ```shell
-$ go test -coverpkg=./... ./...
+go test -coverpkg=./... ./...
 ```
