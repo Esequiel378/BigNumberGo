@@ -12,7 +12,6 @@ run:
 
   # include test files or not, default is true
   tests: false
-
   # default is true. Enables skipping of directories:
   #   vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
   skip-dirs-use-default: true
@@ -78,6 +77,18 @@ linters-settings:
     # Should ignore tests.
     # Default: false
     skip-tests: true
+  gofmt:
+    # Simplify code: gofmt with `-s` option.
+    # Default: true
+    simplify: false
+    # Apply the rewrite rules to the source before reformatting.
+    # https://pkg.go.dev/cmd/gofmt
+    # Default: []
+    rewrite-rules:
+      - pattern: 'interface{}'
+        replacement: 'any'
+      - pattern: 'a[b:len(a)]'
+        replacement: 'a[b:]'
 
 issues:
   # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
