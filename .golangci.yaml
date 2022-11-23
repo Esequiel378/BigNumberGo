@@ -65,6 +65,19 @@ linters-settings:
       - WARN
       - OPTIMIZE # marks code that should be optimized before merging
       - HACK # marks hack-around that should be removed before merging
+  cyclop:
+    # The maximal code complexity to report.
+    # Default: 10
+    max-complexity: 15
+
+    # The maximal average package complexity.
+    # If it's higher than 0.0 (float) the check is enabled
+    # Default: 0.0
+    # package-average: 0.5
+
+    # Should ignore tests.
+    # Default: false
+    skip-tests: true
 
 issues:
   # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
