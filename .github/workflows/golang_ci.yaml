@@ -42,3 +42,16 @@ jobs:
           version: v1.49.0
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           only-new-issues: true
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2.4.0
+      - name: set up go
+        uses: actions/setup-go@v2.1.5
+        with:
+          go-version: 1.18
+      - name: test
+        run: go test ./...
