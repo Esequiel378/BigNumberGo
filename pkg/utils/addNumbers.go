@@ -153,7 +153,7 @@ func addStringNumbers(lhs, rhs string) (string, error) {
 // This is based on the [Option Pattern  in Golang](https://blog.damavis.com/en/option-pattern-in-golang)
 type AddTwoStringNumbersOptions = func(lhs, rhs string, carry int) (string, string, int)
 
-// WithCarry is an option that can be used to add a initial carry to the addition
+// WithCarry is an option that can be used to add a initial carry to the addition.
 func WithCarry(carry int) AddTwoStringNumbersOptions {
 	return func(lhs, rhs string, _ int) (string, string, int) {
 		return lhs, rhs, carry
