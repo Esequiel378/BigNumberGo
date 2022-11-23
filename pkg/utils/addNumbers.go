@@ -171,7 +171,7 @@ const IntegerNumberMatch = "^[0-9]+$"
 //  "08", 1, nil
 func addTwoStringNumbers(
 	lhs, rhs string,
-	opts ...AddTwoStringNumbersOptions
+	opts ...AddTwoStringNumbersOptions,
 ) (string, int, error) {
 	var (
 		match	bool
