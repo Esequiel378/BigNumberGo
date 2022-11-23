@@ -197,6 +197,7 @@ func addTwoStringNumbers(
 		return zero, carry, ErrInvalidIntegerNumber
 	}
 
+	// Apply transformations
 	for _, opt := range opts {
 		lhs, rhs, carry = opt(lhs, rhs, carry)
 	}
