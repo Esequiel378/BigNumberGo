@@ -32,7 +32,7 @@ var (
 //
 //  >> AddNumbers("1234567.8901 2.345", "12.34 2345678901.2")
 //  "1234582.2301 2345678903.545"
-func AddNumbers(lhs, rhs string) (zero string, err error) {
+func AddNumbers(lhs, rhs string) (string, error) {
 	var (
 		zero	string
 		err	  	error
@@ -51,7 +51,7 @@ func AddNumbers(lhs, rhs string) (zero string, err error) {
 		lhsElm, rhsElm := lhsElements[idx], rhsElements[idx]
 
 		var result string
-		
+
 		result, err = addStringNumbers(lhsElm, rhsElm)
 		if err != nil {
 			return zero, err
