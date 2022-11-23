@@ -33,6 +33,11 @@ var (
 //  >> AddNumbers("1234567.8901 2.345", "12.34 2345678901.2")
 //  "1234582.2301 2345678903.545"
 func AddNumbers(lhs, rhs string) (zero string, err error) {
+	var (
+		zero	string
+		err	  	error
+	)
+
 	lhsElements, rhsElements := strings.Split(lhs, " "), strings.Split(rhs, " ")
 
 	if len(lhsElements) != len(rhsElements) {
@@ -46,6 +51,7 @@ func AddNumbers(lhs, rhs string) (zero string, err error) {
 		lhsElm, rhsElm := lhsElements[idx], rhsElements[idx]
 
 		var result string
+		
 		result, err = addStringNumbers(lhsElm, rhsElm)
 		if err != nil {
 			return zero, err
@@ -78,9 +84,9 @@ const InputNumberMatch = "^[0-9]*[.]?[0-9]+?$"
 //  "1234582.2301"
 func addStringNumbers(lhs, rhs string) (string, error) {
 	var (
-		match bool
-		zero string
-		err  error
+		match 	bool
+		zero 	string
+		err  	error
 	)
 
 	// Validate lhs input value
@@ -229,14 +235,16 @@ func addTwoStringNumbers(
 		// Convert lhsValue to int
 		lhsValue, err = strconv.Atoi(lhsStr)
 		if err != nil {
-			err = fmt.Errorf("failed to covert string `%s` into int: %v", lhsStr, err)
+			err = fmt.Errorf("failed to covert string `%s` into int: %w", lhsStr, err)
+
 			return zero, carry, err
 		}
 
 		// Convert rhsValue to int
 		rhsValue, err = strconv.Atoi(rhsStr)
 		if err != nil {
-			err = fmt.Errorf("failed to covert string `%s` into int: %v", rhsStr, err)
+			err = fmt.Errorf("failed to covert string `%s` into int: %w", rhsStr, err)
+
 			return zero, carry, err
 		}
 
