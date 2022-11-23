@@ -38,22 +38,22 @@ func AddNumbers(lhs, rhs string) (zero string, err error) {
 		return zero, ErrInputWithDifferentNumbersCount
 	}
 
-	result := make([]string, len(lhsElements))
+	results := make([]string, len(lhsElements))
 
 	for idx := 0; idx < len(lhsElements); idx++ {
 		// TODO: chekIsInBounds
 		lhsElm, rhsElm := lhsElements[idx], rhsElements[idx]
 
-		var r string
-		r, err = addStringNumbers(lhsElm, rhsElm)
+		var result string
+		result, err = addStringNumbers(lhsElm, rhsElm)
 		if err != nil {
 			return zero, err
 		}
 
-		result[idx] = r
+		results[idx] = result
 	}
 
-	resultString := strings.Join(result, " ")
+	resultString := strings.Join(results, " ")
 
 	return resultString, nil
 }
@@ -75,8 +75,12 @@ const InputNumberMatch = "^[0-9]*[.]?[0-9]+?$"
 //
 //  >> addStringNumbers("1234567.8901", "12.34")
 //  "1234582.2301"
-func addStringNumbers(lhs, rhs string) (zero string, err error) {
-	var match bool
+func addStringNumbers(lhs, rhs string) (string, error) {
+	var (
+		match bool
+		zero string
+		err  error
+	)
 
 	// Validate lhs input value
 	if match, err = regexp.MatchString(InputNumberMatch, lhs); !match || err != nil {
@@ -105,8 +109,10 @@ func addStringNumbers(lhs, rhs string) (zero string, err error) {
 	// Fill the missing decimal part with zeros
 	rhsDecimal += strings.Repeat("0", len(lhsDecimal)-len(rhsDecimal))
 
-	var carry int
-	var decimal string
+	var (
+		carry 	int
+		decimal string
+	)
 
 	// Compute the sum of the decimal part
 	if lhsFound && rhsFound {
@@ -163,8 +169,16 @@ const IntegerNumberMatch = "^[0-9]+$"
 //
 //  >> addTwoStringNumbers("99", "9")
 //  "08", 1, nil
-func addTwoStringNumbers(lhs, rhs string, opts ...AddTwoStringNumbersOptions) (zero string, carry int, err error) {
-	var match bool
+func addTwoStringNumbers(
+	lhs, rhs string,
+	opts ...AddTwoStringNumbersOptions
+) (string, int, error) {
+	var (
+		match	bool
+		zero  	string
+		carry 	int
+		err  	error
+	)
 
 	// Validate lhs input value
 	if match, err = regexp.MatchString(IntegerNumberMatch, lhs); !match || err != nil {
@@ -214,12 +228,14 @@ func addTwoStringNumbers(lhs, rhs string, opts ...AddTwoStringNumbersOptions) (z
 		// Convert lhsValue to int
 		lhsValue, err = strconv.Atoi(lhsStr)
 		if err != nil {
+			err = fmt.Errorf("failed to covert string `%s` into int: %v", lhsStr, err)
 			return zero, carry, err
 		}
 
 		// Convert rhsValue to int
 		rhsValue, err = strconv.Atoi(rhsStr)
 		if err != nil {
+			err = fmt.Errorf("failed to covert string `%s` into int: %v", rhsStr, err)
 			return zero, carry, err
 		}
 
