@@ -35,7 +35,6 @@ linters:
     - golint # The repository of the linter has been archived by the owner.  Replaced by revive.
     - maligned # The repository of the linter has been archived by the owner.  Replaced by govet 'fieldalignment'.
     - exhaustivestruct # Competes with validators.
-    - gofumpt # imports sorter, conflicts with other sorters.
     - gci # imports sorter, conflicts with other sorters.
     - ireturn
     - contextcheck
