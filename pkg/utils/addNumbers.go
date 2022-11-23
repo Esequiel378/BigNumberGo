@@ -24,14 +24,15 @@ var (
 // + The numbers can be arbitrarily long, e.g. 1000+ digits.
 //
 // Examples:
-//  >> AddNumbers("123 456 789", "11 22 33")
-//  "134 478 822"
 //
-//  >> AddNumbers("123456789012345678901 23456789", "12345678 234567890123456789012")
-//  "123456789012358024579 234567890123480245801"
+//	>> AddNumbers("123 456 789", "11 22 33")
+//	"134 478 822"
 //
-//  >> AddNumbers("1234567.8901 2.345", "12.34 2345678901.2")
-//  "1234582.2301 2345678903.545"
+//	>> AddNumbers("123456789012345678901 23456789", "12345678 234567890123456789012")
+//	"123456789012358024579 234567890123480245801"
+//
+//	>> AddNumbers("1234567.8901 2.345", "12.34 2345678901.2")
+//	"1234582.2301 2345678903.545"
 func AddNumbers(lhs, rhs string) (string, error) {
 	var (
 		zero string
@@ -75,13 +76,14 @@ const InputNumberMatch = "^[0-9]*[.]?[0-9]+?$"
 // The numbers may include decimal places.
 //
 // Examples
-//  >> addStringNumbers("123", "11") "134"
 //
-//  >> addStringNumbers("123456789012345678901", "12345678")
-//  "123456789012358024579"
+//	>> addStringNumbers("123", "11") "134"
 //
-//  >> addStringNumbers("1234567.8901", "12.34")
-//  "1234582.2301"
+//	>> addStringNumbers("123456789012345678901", "12345678")
+//	"123456789012358024579"
+//
+//	>> addStringNumbers("1234567.8901", "12.34")
+//	"1234582.2301"
 func addStringNumbers(lhs, rhs string) (string, error) {
 	var (
 		match bool
@@ -171,11 +173,12 @@ const IntegerNumberMatch = "^[0-9]+$"
 // The numbers must not include decimal places.
 //
 // Examples:
-//  >> addTwoStringNumbers("123", "456")
-//  "579", 0, nil
 //
-//  >> addTwoStringNumbers("99", "9")
-//  "08", 1, nil
+//	>> addTwoStringNumbers("123", "456")
+//	"579", 0, nil
+//
+//	>> addTwoStringNumbers("99", "9")
+//	"08", 1, nil
 func addTwoStringNumbers(
 	lhs, rhs string,
 	opts ...AddTwoStringNumbersOptions,
