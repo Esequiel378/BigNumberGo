@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -34,8 +34,8 @@ var (
 //  "1234582.2301 2345678903.545"
 func AddNumbers(lhs, rhs string) (string, error) {
 	var (
-		zero	string
-		err	  	error
+		zero string
+		err  error
 	)
 
 	lhsElements, rhsElements := strings.Split(lhs, " "), strings.Split(rhs, " ")
@@ -84,9 +84,9 @@ const InputNumberMatch = "^[0-9]*[.]?[0-9]+?$"
 //  "1234582.2301"
 func addStringNumbers(lhs, rhs string) (string, error) {
 	var (
-		match 	bool
-		zero 	string
-		err  	error
+		match bool
+		zero  string
+		err   error
 	)
 
 	// Validate lhs input value
@@ -117,7 +117,7 @@ func addStringNumbers(lhs, rhs string) (string, error) {
 	rhsDecimal += strings.Repeat("0", len(lhsDecimal)-len(rhsDecimal))
 
 	var (
-		carry 	int
+		carry   int
 		decimal string
 	)
 
@@ -181,10 +181,10 @@ func addTwoStringNumbers(
 	opts ...AddTwoStringNumbersOptions,
 ) (string, int, error) {
 	var (
-		match	bool
-		zero  	string
-		carry 	int
-		err  	error
+		match bool
+		zero  string
+		carry int
+		err   error
 	)
 
 	// Validate lhs input value
