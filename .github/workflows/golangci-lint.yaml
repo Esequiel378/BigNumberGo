@@ -38,7 +38,7 @@ jobs:
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3.1.0
         with:
-          args: -c .golangci.yml
+          args: -c .golangci.yaml
           version: v1.49.0
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           only-new-issues: true
