@@ -1,4 +1,5 @@
 name: golangci-lint
+
 on:
   push:
     tags:
@@ -7,23 +8,37 @@ on:
       - master
       - main
   pull_request:
+
 permissions:
   contents: read
   # Optional: allow read access to pull request. Use with `only-new-issues` option.
   pull-requests: read
+
 jobs:
-  golangci:
-    name: lint
+  build:
+    name: Build
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - name: Build
+        run: go build -v ./...
+  lint:
+    name: Linting Golang
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/setup-go@v3
         with:
-          go-version: "1.18"
+          go-version: 1.18
       - uses: actions/checkout@v3
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3.1.0
         with:
-          version: v1.29
-
+          args: -c .golangci.yml
+          version: v1.49.0
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           only-new-issues: true
