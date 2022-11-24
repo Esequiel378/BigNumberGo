@@ -131,15 +131,13 @@ func (b BigInt) Add(other *BigInt) *BigInt {
 			sum++
 		}
 
-		// Count the number of digits to determine if we need to carry
-		sumDigits := utils.CountDigits(int64(sum))
-
-		// If the sum doesn't fit we need to carry to the next chunk
-		carry = sumDigits > b.chukSize
+		// If the sum doesn't fit in a chunk,
+		// we need to carry to the next addition
+		exponential := uint32(math.Pow10(b.chukSize))
+		carry = sum/exponential > 0
 
 		if carry {
 			// Remove the carry from the sum
-			exponential := math.Pow10(b.chukSize)
 			// sum %= 10**b.chukSize
 			sum %= uint32(exponential)
 		}
