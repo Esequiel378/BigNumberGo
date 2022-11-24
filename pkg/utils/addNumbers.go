@@ -124,7 +124,7 @@ func addStringNumbers(lhs, rhs string) (string, error) {
 	)
 
 	// Compute the sum of the decimal part
-	if lhsFound && rhsFound {
+	if lhsFound || rhsFound {
 		decimal, carry, err = addTwoStringNumbers(lhsDecimal, rhsDecimal)
 		if err != nil {
 			return zero, err
