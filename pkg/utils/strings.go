@@ -10,8 +10,6 @@ var (
 	ErrNumberOutOfRange     = errors.New("number out of range")
 )
 
-const maxUint32 = uint64(^uint32(0))
-
 // StringToUint32 converts a string to uint32
 func StringToUint32(value string) (uint32, error) {
 	integer, err := strconv.ParseUint(value, 10, 64)
@@ -19,7 +17,7 @@ func StringToUint32(value string) (uint32, error) {
 		return 0, ErrParsingIntegerNumber
 	}
 
-	if integer > maxUint32 {
+	if int64(integer) > maxUint32 {
 		return 0, ErrNumberOutOfRange
 	}
 
