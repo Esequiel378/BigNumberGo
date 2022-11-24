@@ -1,4 +1,4 @@
-package bigint
+package bignumber
 
 import (
 	"fmt"
@@ -21,6 +21,11 @@ func TestNewBigInt(t *testing.T) {
 			want:  "42949672954294967295",
 			err:   nil,
 		},
+		{
+			input: "qwer",
+			want:  "",
+			err:   ErrInvalidIntegerNumber,
+		},
 	}
 
 	for idx, tc := range tests {
@@ -32,7 +37,7 @@ func TestNewBigInt(t *testing.T) {
 				t.Errorf("got %v, want %v", err, tc.err)
 			}
 
-			if bg.String() != tc.want {
+			if bg != nil && bg.String() != tc.want {
 				t.Errorf("got %v, want %v", bg.String(), tc.want)
 			}
 		})

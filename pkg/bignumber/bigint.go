@@ -1,7 +1,6 @@
-package bigint
+package bignumber
 
 import (
-	"errors"
 	"math"
 	"regexp"
 	"strconv"
@@ -10,14 +9,7 @@ import (
 	"teladoc/pkg/utils"
 )
 
-var (
-	// ErrInvalidIntegerNumber is returned when the input string is not a valid integer number
-	ErrInvalidIntegerNumber = errors.New("invalid integer number")
-	// ErrConvertingChunkToInteger is returned when a chunk cannot be converted to integer
-	ErrConvertingChunkToInteger = errors.New("error converting chunk to integer")
-)
-
-// Bigconstant Int represents a large integer number.
+// BigInt is a integer number with arbitrary precision.
 type BigInt struct {
 	// magnitude is where the number is stored in chunks
 	magnitude []uint32
