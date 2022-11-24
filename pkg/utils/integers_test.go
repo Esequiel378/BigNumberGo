@@ -5,6 +5,9 @@ import (
 	"testing"
 )
 
+// maxInt64 is the maximum value of a int64.
+const maxInt64 = int64(^uint64(0) >> 1)
+
 func TestCountDigits(t *testing.T) {
 	tests := []struct {
 		input int64
