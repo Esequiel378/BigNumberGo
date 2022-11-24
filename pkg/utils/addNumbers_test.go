@@ -37,6 +37,12 @@ func TestAddNumbers(t *testing.T) {
 			err:    nil,
 		},
 		{
+			lhs:    "19.9 10",
+			rhs:    "10 29.9",
+			result: "29.9 39.9",
+			err:    nil,
+		},
+		{
 			lhs:    "123..3 123. .123",
 			rhs:    "1 2 3",
 			result: "",
