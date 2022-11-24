@@ -1,58 +1,25 @@
 package utils
 
 import (
-	"errors"
 	"fmt"
 	"testing"
 )
 
 func TestAddNumbers(t *testing.T) {
 	tests := []struct {
-		lhs, rhs string
-		result   string
-		err      error
+		input string
+		want  string
+		err   error
 	}{
 		{
-			lhs:    "123 456 789",
-			rhs:    "11 22 33",
-			result: "134 478 822",
-			err:    nil,
+			input: "4294967295",
+			want:  "4294967295",
+			err:   nil,
 		},
 		{
-			lhs:    "123456789012345678901 23456789",
-			rhs:    "12345678 234567890123456789012",
-			result: "123456789012358024579 234567890123480245801",
-			err:    nil,
-		},
-		{
-			lhs:    "99",
-			rhs:    "9",
-			result: "108",
-			err:    nil,
-		},
-		{
-			lhs:    "1234567.8901 2.345",
-			rhs:    "12.34 2345678901.2",
-			result: "1234580.2301 2345678903.545",
-			err:    nil,
-		},
-		{
-			lhs:    "19.9 10",
-			rhs:    "10 29.9",
-			result: "29.9 39.9",
-			err:    nil,
-		},
-		{
-			lhs:    "123..3 123. .123",
-			rhs:    "1 2 3",
-			result: "",
-			err:    ErrInvalidInputNumber,
-		},
-		{
-			lhs:    "1 2 3",
-			rhs:    "123..3 123. .123",
-			result: "",
-			err:    ErrInvalidInputNumber,
+			input: "42949672954294967295",
+			want:  "42949672954294967295",
+			err:   nil,
 		},
 	}
 
@@ -60,65 +27,39 @@ func TestAddNumbers(t *testing.T) {
 		testname := fmt.Sprintf("test#%d", idx)
 
 		t.Run(testname, func(t *testing.T) {
-			got, err := AddNumbers(tc.lhs, tc.rhs)
-			if !errors.Is(err, tc.err) {
-				t.Errorf("got error `%v`, want `%v`", err, tc.err)
+			bg, err := NewBigInt(tc.input)
+			if err != tc.err {
+				t.Errorf("got %v, want %v", err, tc.err)
 			}
 
-			if got != tc.result {
-				t.Errorf("got `%s`, want `%s`", got, tc.result)
+			if bg.String() != tc.want {
+				t.Errorf("got %v, want %v", bg.String(), tc.want)
 			}
 		})
 	}
 }
 
-func TestAddTwoStringNumbers(t *testing.T) {
+func TestStringToUint32(t *testing.T) {
 	tests := []struct {
-		lhs, rhs string
-		result   string
-		carry    int
-		opts     []AddTwoStringNumbersOptions
-		err      error
+		input string
+		want  uint32
+		err   error
 	}{
 		{
-			lhs:    "123",
-			rhs:    "456",
-			result: "579",
-			opts:   []AddTwoStringNumbersOptions{},
-			carry:  0,
-			err:    nil,
+			input: "4294967295",
+			want:  4294967295,
+			err:   nil,
 		},
 		{
-			lhs:    "99",
-			rhs:    "9",
-			result: "08",
-			opts:   []AddTwoStringNumbersOptions{WithCarry(0)},
-			carry:  1,
-			err:    nil,
+			// INFO: This is one digit more than the max value of uint32
+			input: "42949672951",
+			want:  0,
+			err:   ErrNumberOutOfRange,
 		},
 		{
-			lhs:    "100",
-			rhs:    "9",
-			result: "110",
-			opts:   []AddTwoStringNumbersOptions{WithCarry(1)},
-			carry:  0,
-			err:    nil,
-		},
-		{
-			lhs:    "1",
-			rhs:    "1",
-			result: "",
-			opts:   []AddTwoStringNumbersOptions{WithCarry(3)},
-			carry:  3,
-			err:    ErrInvalidCarryValue,
-		},
-		{
-			lhs:    "11.2",
-			rhs:    "10.2",
-			result: "",
-			opts:   []AddTwoStringNumbersOptions{},
-			carry:  0,
-			err:    ErrInvalidIntegerNumber,
+			input: "42949672954294967295",
+			want:  0,
+			err:   ErrParsingIntegerNumber,
 		},
 	}
 
@@ -126,17 +67,61 @@ func TestAddTwoStringNumbers(t *testing.T) {
 		testname := fmt.Sprintf("test#%d", idx)
 
 		t.Run(testname, func(t *testing.T) {
-			result, carry, err := addTwoStringNumbers(tc.lhs, tc.rhs, tc.opts...)
-			if !errors.Is(err, tc.err) {
-				t.Errorf("got error `%v`, want `%v`", err, tc.err)
+			result, err := StringToUint32(tc.input)
+
+			if err != tc.err {
+				t.Errorf("got %v, want %v", err, tc.err)
 			}
 
-			if result != tc.result {
-				t.Errorf("got `%s`, want `%s`", result, tc.result)
+			if result != tc.want {
+				t.Errorf("got %v, want %v", result, tc.want)
+			}
+		})
+	}
+}
+
+func TestChunkString(t *testing.T) {
+	tests := []struct {
+		input string
+		size  int
+		want  []string
+	}{
+		{
+			input: "",
+			size:  10,
+			want:  []string{""},
+		},
+		{
+			input: "Hello world",
+			size:  10,
+			want:  []string{"Hello worl", "d"},
+		},
+		{
+			input: "4294967295",
+			size:  10,
+			want:  []string{"4294967295"},
+		},
+		{
+			input: "42949672954294967295",
+			size:  10,
+			want:  []string{"4294967295", "4294967295"},
+		},
+	}
+
+	for idx, tc := range tests {
+		testname := fmt.Sprintf("test#%d", idx)
+
+		t.Run(testname, func(t *testing.T) {
+			result := ChunkString(tc.input, tc.size)
+
+			if len(result) != len(tc.want) {
+				t.Errorf("got %v, want %v", result, tc.want)
 			}
 
-			if carry != tc.carry {
-				t.Errorf("got `%d`, want `%d`", carry, tc.carry)
+			for i := 0; i < len(result); i++ {
+				if result[i] != tc.want[i] {
+					t.Errorf("got %v, want %v", result, tc.want)
+				}
 			}
 		})
 	}

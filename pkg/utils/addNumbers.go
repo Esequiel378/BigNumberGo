@@ -81,7 +81,6 @@ func StringToUint32(value string) (uint32, error) {
 }
 
 // ChunkString breaks a string into chunks of a given size
-// TODO: Add tests for this function
 func ChunkString(value string, chunkSize int) []string {
 	if len(value) <= chunkSize {
 		return []string{value}
