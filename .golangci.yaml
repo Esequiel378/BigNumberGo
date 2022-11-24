@@ -27,6 +27,7 @@ linters:
   disable:
     - gomnd # Magic numbers
     - lll
+    - gomoddirectives
     - exhaustruct # Not needed for now.
     - tagliatelle # Checks json tags, sometimes we use it to transform unwanted json.
     - interfacer # The repository of the linter has been archived by the owner.
