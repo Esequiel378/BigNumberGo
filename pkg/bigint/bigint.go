@@ -10,10 +10,14 @@ import (
 	"teladoc/pkg/utils"
 )
 
-// ErrInvalidIntegerNumber is returned when the input string is not a valid integer number
-var ErrInvalidIntegerNumber = errors.New("invalid integer number")
+var (
+	// ErrInvalidIntegerNumber is returned when the input string is not a valid integer number
+	ErrInvalidIntegerNumber = errors.New("invalid integer number")
+	// ErrConvertingChunkToInteger is returned when a chunk cannot be converted to integer
+	ErrConvertingChunkToInteger = errors.New("error converting chunk to integer")
+)
 
-// BigInt represents a large integer number
+// Bigconstant Int represents a large integer number.
 type BigInt struct {
 	// magnitude is where the number is stored in chunks
 	magnitude []uint32
@@ -33,7 +37,7 @@ const IntegerNumberMatch = "^[0-9]+$"
 // The string must be a valid integer number
 // and must not contain any decimal places
 //
-// Ex: 123, 123456789012345678901234567890
+// Ex: 123, 123456789012345678901234567890, etc.
 func NewBigInt(value string) (*BigInt, error) {
 	// Validate input value
 	match, err := regexp.MatchString(IntegerNumberMatch, value)
@@ -54,7 +58,7 @@ func NewBigInt(value string) (*BigInt, error) {
 	for idx, chunk := range chunks {
 		integer, err := utils.StringToUint32(chunk)
 		if err != nil {
-			return nil, err
+			return nil, ErrConvertingChunkToInteger
 		}
 
 		magnitude[idx] = integer
@@ -69,24 +73,24 @@ func NewBigInt(value string) (*BigInt, error) {
 	return bigInt, nil
 }
 
-// Length returns the number of digits in the BigInt
+// Length returns the number of digits in the BigInt.
 func (b BigInt) Length() int {
 	return b.length
 }
 
-// String returns the string representation of the BigInt
+// String returns the string representation of the BigInt.
 func (b BigInt) String() string {
-	var sb strings.Builder
+	var result strings.Builder
 
 	for _, chunk := range b.magnitude {
 		value := strconv.FormatUint(uint64(chunk), 10)
-		sb.WriteString(value)
+		result.WriteString(value)
 	}
 
-	return sb.String()
+	return result.String()
 }
 
-// Add adds two BigInts and returns the result
+// Add adds two BigInts and returns the result.
 func (b BigInt) Add(other *BigInt) *BigInt {
 	lhs, rhs := b.magnitude, other.magnitude
 
@@ -110,7 +114,7 @@ func (b BigInt) Add(other *BigInt) *BigInt {
 	var carry bool
 
 	for offset := 1; offset <= len(lhs); offset++ {
-		// Get the the chunk index
+		// Get the chunk index
 		index := len(lhs) - offset
 
 		// Get the chunk values, rhs may be shorter than lhs
@@ -143,8 +147,8 @@ func (b BigInt) Add(other *BigInt) *BigInt {
 
 		if carry {
 			// Remove the carry from the sum
-			// sum %= 10**b.chukSize
 			exponential := math.Pow10(b.chukSize)
+			// sum %= 10**b.chukSize
 			sum %= uint32(exponential)
 		}
 

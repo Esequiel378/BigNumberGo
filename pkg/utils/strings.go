@@ -6,11 +6,13 @@ import (
 )
 
 var (
+	// ErrParsingIntegerNumber is returned when a string cannot be parsed to an integer.
 	ErrParsingIntegerNumber = errors.New("error parsing integer number")
-	ErrNumberOutOfRange     = errors.New("number out of range")
+	// ErrNumberOutOfRange is returned when a number is out of range.
+	ErrNumberOutOfRange = errors.New("number out of range")
 )
 
-// StringToUint32 converts a string to uint32
+// StringToUint32 converts a string to uint32.
 func StringToUint32(value string) (uint32, error) {
 	integer, err := strconv.ParseUint(value, 10, 64)
 	if err != nil {
@@ -26,7 +28,7 @@ func StringToUint32(value string) (uint32, error) {
 	return result, nil
 }
 
-// ChunkString breaks a string into chunks of a given size
+// ChunkString breaks a string into chunks of a given size.
 func ChunkString(value string, chunkSize int) []string {
 	if len(value) <= chunkSize {
 		return []string{value}
@@ -41,7 +43,7 @@ func ChunkString(value string, chunkSize int) []string {
 			end = len(value)
 		}
 
-		chunks = append(chunks, string(value[start:end]))
+		chunks = append(chunks, value[start:end])
 	}
 
 	return chunks
