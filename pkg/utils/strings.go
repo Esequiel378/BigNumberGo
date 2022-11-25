@@ -31,27 +31,6 @@ func StringToUint32(value string) (uint32, error) {
 	return result, nil
 }
 
-// ChunkString breaks a string into chunks of a given size.
-func ChunkString(value string, chunkSize int) []string {
-	if len(value) <= chunkSize {
-		return []string{value}
-	}
-
-	var chunks []string
-
-	for start := 0; start < len(value); start += chunkSize {
-		end := start + chunkSize
-
-		if end > len(value) {
-			end = len(value)
-		}
-
-		chunks = append(chunks, value[start:end])
-	}
-
-	return chunks
-}
-
 // ChunkStringFromRight breaks a string into chunks of a given size from the right.
 func ChunkStringFromRight(value string, chunkSize int) []string {
 	if len(value) <= chunkSize {

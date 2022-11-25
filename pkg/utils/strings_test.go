@@ -46,54 +46,6 @@ func TestStringToUint32(t *testing.T) {
 	}
 }
 
-func TestChunkString(t *testing.T) {
-	tests := []struct {
-		input string
-		size  int
-		want  []string
-	}{
-		{
-			input: "",
-			size:  10,
-			want:  []string{""},
-		},
-		{
-			input: "Hello world",
-			size:  10,
-			want:  []string{"Hello worl", "d"},
-		},
-		{
-			input: "4294967295",
-			size:  10,
-			want:  []string{"4294967295"},
-		},
-		{
-			input: "42949672954294967295",
-			size:  10,
-			want:  []string{"4294967295", "4294967295"},
-		},
-	}
-
-	for idx, tc := range tests {
-		testname := fmt.Sprintf("test#%d", idx)
-
-		t.Run(testname, func(t *testing.T) {
-			result := ChunkString(tc.input, tc.size)
-
-			if len(result) != len(tc.want) {
-				t.Errorf("got %v, want %v", result, tc.want)
-				return
-			}
-
-			for i := 0; i < len(result); i++ {
-				if result[i] != tc.want[i] {
-					t.Errorf("got %v, want %v", result, tc.want)
-				}
-			}
-		})
-	}
-}
-
 func TestChunkStringFromRight(t *testing.T) {
 	tests := []struct {
 		input string

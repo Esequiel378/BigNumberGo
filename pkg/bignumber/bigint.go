@@ -42,7 +42,7 @@ func NewBigInt(value string) (*BigInt, error) {
 	// to store and perform the addition operation on the number
 	// TODO: Invsigate if we can use any other data type
 	chunkSize := 9
-	chunks := utils.ChunkString(value, chunkSize)
+	chunks := utils.ChunkStringFromRight(value, chunkSize)
 
 	magnitude := make([]uint32, len(chunks))
 
