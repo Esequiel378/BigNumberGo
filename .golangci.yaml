@@ -78,6 +78,11 @@ linters-settings:
     # Should ignore tests.
     # Default: false
     skip-tests: true
+  gofumpt:
+    # Module path which contains the source code being formatted.
+    # If using go modules, use the same name you have in the go.mod file
+    # Default: ""
+    module-path: "teladoc"
   gofmt:
     # Simplify code: gofmt with `-s` option.
     # Default: true
