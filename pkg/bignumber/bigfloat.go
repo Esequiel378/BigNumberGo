@@ -59,3 +59,35 @@ func (b BigFloat) String() string {
 
 	return integer + "." + decimal
 }
+
+func (b BigFloat) Add(other *BigFloat) *BigFloat {
+	integer := b.integer.Add(other.integer)
+
+	lhsDecimal := b.decimal
+	rhsDecimal := other.decimal
+
+	// Make sure that lhs has more decimal places than rhs
+	if lhsDecimal.Length() < rhsDecimal.Length() {
+		lhsDecimal, rhsDecimal = rhsDecimal, lhsDecimal
+	}
+
+	deltaZeros := lhsDecimal.Length() - rhsDecimal.Length()
+
+	if deltaZeros > 0 {
+		zeros := strings.Repeat("0", deltaZeros)
+
+		newValue := rhsDecimal.String() + zeros
+
+		// INFO: We can ignore the error here because we know that the value is valid
+		// But we should probably handle it anyway
+		// TODO: Handle error, method definition should be changed to return an error
+		rhsDecimal, _ = NewBigInt(newValue)
+	}
+
+	decimal := lhsDecimal.Add(rhsDecimal)
+
+	return &BigFloat{
+		integer: integer,
+		decimal: decimal,
+	}
+}
