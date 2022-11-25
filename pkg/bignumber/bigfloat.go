@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"teladoc/pkg/utils"
+	"teladoc/internal/utils"
 )
 
 // BigFloat is a decimal number with arbitrary precision.

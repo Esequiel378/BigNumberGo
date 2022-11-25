@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"teladoc/pkg/utils"
+	"teladoc/internal/utils"
 )
 
 // BigInt is a integer number with arbitrary precision.
