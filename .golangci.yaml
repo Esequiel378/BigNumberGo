@@ -27,6 +27,7 @@ linters:
   disable:
     - gomnd # Magic numbers
     - lll
+    - gomoddirectives
     - exhaustruct # Not needed for now.
     - tagliatelle # Checks json tags, sometimes we use it to transform unwanted json.
     - interfacer # The repository of the linter has been archived by the owner.
@@ -77,6 +78,11 @@ linters-settings:
     # Should ignore tests.
     # Default: false
     skip-tests: true
+  gofumpt:
+    # Module path which contains the source code being formatted.
+    # If using go modules, use the same name you have in the go.mod file
+    # Default: ""
+    module-path: "teladoc"
   gofmt:
     # Simplify code: gofmt with `-s` option.
     # Default: true
