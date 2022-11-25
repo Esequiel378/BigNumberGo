@@ -37,6 +37,7 @@ func TestNewBigFloat(t *testing.T) {
 			err:   ErrInvalidDecimalNumber,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			bg, err := NewBigFloat(tt.input)
@@ -44,6 +45,11 @@ func TestNewBigFloat(t *testing.T) {
 				t.Errorf("got %v, want %v", err, tt.err)
 				return
 			}
+
+			if bg != nil {
+				fmt.Printf("got %v, want %v\n", bg, tt.want)
+			}
+
 			if bg != nil && bg.String() != tt.want {
 				t.Errorf("got %v, want %v", bg, tt.want)
 			}
@@ -74,6 +80,12 @@ func TestNewBigFloatAdd(t *testing.T) {
 			lhs:  "1239.21127612734691273469",
 			rhs:  "1234.1234712349812",
 			want: "2473.33474736232811273469",
+			err:  nil,
+		},
+		{
+			lhs:  "1239.91127612734",
+			rhs:  "1234.1",
+			want: "2474.01127612734",
 			err:  nil,
 		},
 	}

@@ -87,18 +87,18 @@ func (b BigFloat) Precision() int64 {
 	return b.precision
 }
 
+func (b BigFloat) Add(other *BigFloat) *BigFloat {
 	lhsDecimal := b.decimal
 	rhsDecimal := other.decimal
+	deltaZeros := utils.Abs(b.Precision() - other.Precision())
 
 	// Make sure that lhs has more decimal places than rhs
-	if lhsDecimal.Length() < rhsDecimal.Length() {
+	if b.Precision() < other.Precision() {
 		lhsDecimal, rhsDecimal = rhsDecimal, lhsDecimal
 	}
 
-	deltaZeros := lhsDecimal.Length() - rhsDecimal.Length()
-
 	if deltaZeros > 0 {
-		zeros := strings.Repeat("0", deltaZeros)
+		zeros := strings.Repeat("0", int(deltaZeros))
 
 		newValue := rhsDecimal.String() + zeros
 
@@ -109,9 +109,29 @@ func (b BigFloat) Precision() int64 {
 	}
 
 	decimal := lhsDecimal.Add(rhsDecimal)
+	integer := b.integer.Add(other.integer)
 
-	return &BigFloat{
-		integer: integer,
-		decimal: decimal,
+	var (
+		integerValue = integer.String()
+		decimalValue = decimal.String()
+	)
+
+	// Check if decimal should carry over to integer
+	if decimal.Length() > lhsDecimal.Length() {
+		// Add carry to integer
+		// TODO: Handle error
+		oneBigInt, _ := NewBigInt("1")
+		integer = integer.Add(oneBigInt)
+
+		// Remove the carry value form the decimal and
+		// update the float values
+		decimalValue = decimal.String()[1:]
+		integerValue = integer.String()
 	}
+
+	newFloatValue := integerValue + "." + decimalValue
+
+	bigFloat, _ := NewBigFloat(newFloatValue)
+
+	return bigFloat
 }
