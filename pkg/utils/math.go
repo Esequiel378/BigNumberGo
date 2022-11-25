@@ -5,7 +5,6 @@ type Number interface {
 }
 
 // Abs returns the absolute value of x.
-// TODO: Add tests
 func Abs[T Number](x T) T {
 	if x < 0 {
 		return -x
