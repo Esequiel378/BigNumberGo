@@ -82,6 +82,11 @@ func TestChunkStringFromRight(t *testing.T) {
 			size:  10,
 			want:  []string{"89", "7712341234"},
 		},
+		{
+			input: "10000000000",
+			size:  9,
+			want:  []string{"10", "000000000"},
+		},
 	}
 
 	for idx, tc := range tests {

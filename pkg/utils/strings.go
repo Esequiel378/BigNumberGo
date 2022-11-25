@@ -12,6 +12,9 @@ var (
 	ErrNumberOutOfRange = errors.New("number out of range")
 )
 
+// maxUint32 is the maximum value of a uint32.
+const maxUint32 = int64(^uint32(0))
+
 // RemoveLeadingZeros removes leading zeros from a string returning
 // the string without leading zeros and the count of leading zeros.
 // TODO: Add tests
