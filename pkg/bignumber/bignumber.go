@@ -55,6 +55,8 @@ func AddNumbers(lhs, rhs string) (string, error) {
 
 		isDecimalAddition := isLHSDecimal || isRHSDecimal
 
+		// Convert both numbers to decimal numbers
+		// if one of the numbers already is.
 		if !isLHSDecimal {
 			lhsElm += ".0"
 		}
@@ -63,6 +65,7 @@ func AddNumbers(lhs, rhs string) (string, error) {
 			rhsElm += ".0"
 		}
 
+		// Create BigFloat intances
 		lhs, err := NewBigFloat(lhsElm)
 		if err != nil {
 			return zero, err
@@ -73,6 +76,7 @@ func AddNumbers(lhs, rhs string) (string, error) {
 			return zero, err
 		}
 
+		// Perform aritmetic addition
 		sum, err := lhs.Add(rhs)
 		if err != nil {
 			return zero, err
@@ -90,9 +94,11 @@ func AddNumbers(lhs, rhs string) (string, error) {
 			}
 		}
 
+		// Store the result
 		results[idx] = result
 	}
 
+	// Jois the results to a single string
 	resultString := strings.Join(results, " ")
 
 	return resultString, nil
