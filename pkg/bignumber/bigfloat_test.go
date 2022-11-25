@@ -46,10 +46,6 @@ func TestNewBigFloat(t *testing.T) {
 				return
 			}
 
-			if bg != nil {
-				fmt.Printf("got %v, want %v\n", bg, tt.want)
-			}
-
 			if bg != nil && bg.String() != tt.want {
 				t.Errorf("got %v, want %v", bg, tt.want)
 			}

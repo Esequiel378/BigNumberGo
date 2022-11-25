@@ -2,7 +2,6 @@ package bignumber
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -53,7 +52,6 @@ func AddNumbers(lhs, rhs string) (string, error) {
 
 		lhs, err := NewBigFloat(lhsElm)
 		if err != nil {
-			fmt.Println("lhs", lhsElm)
 			return zero, err
 		}
 
