@@ -9,14 +9,14 @@ import (
 
 // BigFloat is a decimal number with arbitrary precision.
 type BigFloat struct {
-	// integer is the integer part of the number
+	// integer is the integer part of the number.
 	integer *BigInt
-	// decimal is the decimal part of the number
+	// decimal is the decimal part of the number.
 	decimal *BigInt
 	// leadingZeros is the number of leading zeros in the decimal part
-	// Should be used to calculate the magnitude of the decimal part
+	// Should be used to calculate the magnitude of the decimal part.
 	leadingZeros string
-	// precision is the number of decimal places
+	// precision is the number of decimal places.
 	precision int64
 }
 
@@ -86,7 +86,7 @@ func (b BigFloat) String() string {
 	return integer + "." + b.leadingZeros + decimal
 }
 
-// Precision returns the number of decimal places
+// Precision returns the number of decimal places.
 func (b BigFloat) Precision() int64 {
 	return b.precision
 }
@@ -126,7 +126,6 @@ func (b BigFloat) Add(other *BigFloat) (*BigFloat, error) {
 	// Check if decimal should carry over to integer
 	if decimal.Length() > lhsDecimal.Length() {
 		// Add carry to integer
-		// TODO: Handle error
 		oneBigInt, err := NewBigInt("1")
 		if err != nil {
 			return nil, err

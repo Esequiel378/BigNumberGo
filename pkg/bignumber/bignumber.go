@@ -18,10 +18,6 @@ var (
 	ErrTrimmingDecimalPart = errors.New("error trimming decimal part")
 )
 
-func StringToBigFloat(input string) (*BigFloat, error) {
-	return nil, nil
-}
-
 func AddNumbers(lhs, rhs string) (string, error) {
 	var zero string
 
@@ -37,16 +33,16 @@ func AddNumbers(lhs, rhs string) (string, error) {
 		// TODO: chekIsInBounds
 		lhsElm, rhsElm := lhsElements[idx], rhsElements[idx]
 
-		isLhsDecimal := strings.Contains(lhsElm, ".")
-		isRhsDecimal := strings.Contains(rhsElm, ".")
+		isLHSDecimal := strings.Contains(lhsElm, ".")
+		isRHSDecimal := strings.Contains(rhsElm, ".")
 
-		isDecimalAddition := isLhsDecimal || isRhsDecimal
+		isDecimalAddition := isLHSDecimal || isRHSDecimal
 
-		if !isLhsDecimal {
+		if !isLHSDecimal {
 			lhsElm += ".0"
 		}
 
-		if !isRhsDecimal {
+		if !isRHSDecimal {
 			rhsElm += ".0"
 		}
 

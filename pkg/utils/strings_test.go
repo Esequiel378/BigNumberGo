@@ -17,7 +17,7 @@ func TestStringToUint32(t *testing.T) {
 			err:   nil,
 		},
 		{
-			// INFO: This is one digit more than the max value of uint32
+			// INFO: This is one digit more than the max value of uint32.
 			input: "42949672951",
 			want:  0,
 			err:   ErrNumberOutOfRange,

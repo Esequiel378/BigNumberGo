@@ -23,13 +23,14 @@ func RemoveLeadingZeros(value string) (string, int64) {
 	for _, char := range value {
 		if char == '0' {
 			count++
+
 			continue
 		}
 
 		break
 	}
 
-	// Remove leading zeros from the decimal part to avoid zeros leading chunks
+	// Remove leading zeros from the decimal part to avoid zeros leading chunks.
 	value = value[count:]
 
 	return value, count
