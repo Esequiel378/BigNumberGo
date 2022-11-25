@@ -27,6 +27,8 @@ _**The `AddNumbers` function can is located in the [bignumber.go](https://github
 
 #### Solution 1: Naive approach
 
+> Located in the [naive-solution](https://github.com/Esequiel378/teladoc-take-home-exercise/tree/solutions/naive-solution) branch
+
 This approach will solve the problem by doing a basic right-to-left sum of each individual digit, handling the
 decimal part of the number as a separated sum, add the carry from the last addition the integer part
 original number
@@ -72,6 +74,8 @@ the remainding of the sum to the next addition
 ```
 
 #### Solution 2: 32 bits chunks
+
+> Located in the [master](https://github.com/Esequiel378/teladoc-take-home-exercise/tree/master) branch
 
 This approach will solve the addition of N + M by doing a right-to-left aritmetic addition on
 chunks of 32 bits numbers. To performe this chunk addition we need to pre-process the input string
