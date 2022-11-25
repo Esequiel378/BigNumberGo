@@ -106,21 +106,22 @@ func (b BigInt) Add(other *BigInt) *BigInt {
 	var carry bool
 
 	for offset := 1; offset <= len(lhs); offset++ {
-		// Get the chunk index
-		index := len(lhs) - offset
+		// Get the chunk lhsIndex
+		lhsIndex := len(lhs) - offset
+		rhsIndex := len(rhs) - offset
 
 		// Get the chunk values, rhs may be shorter than lhs
 		// so we need to check if the index is out of bounds
 		// and if so, default to `0` as the value
 		var (
-			lhsChunk = lhs[index]
+			lhsChunk = lhs[lhsIndex]
 			rhsChunk uint32
 		)
 
 		// Get the chunk value from the right
 		// If the right chunk does not exist, use 0
-		if index < len(rhs) {
-			rhsChunk = rhs[index]
+		if rhsIndex >= 0 {
+			rhsChunk = rhs[rhsIndex]
 		}
 
 		// Add the two chunks
@@ -143,7 +144,7 @@ func (b BigInt) Add(other *BigInt) *BigInt {
 		}
 
 		// Store the sum in the result
-		result.magnitude[index] = sum
+		result.magnitude[lhsIndex] = sum
 	}
 
 	// If we have a carry left, we need to add a new chunk
