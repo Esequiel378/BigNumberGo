@@ -57,6 +57,10 @@ func NewBigFloat(value string) (*BigFloat, error) {
 		return nil, err
 	}
 
+	if decimal == "" {
+		decimal = "0"
+	}
+
 	decimalBigInt, err := NewBigInt(decimal)
 	if err != nil {
 		return nil, err
@@ -87,7 +91,8 @@ func (b BigFloat) Precision() int64 {
 	return b.precision
 }
 
-func (b BigFloat) Add(other *BigFloat) *BigFloat {
+// Add adds two BigFloats and returns the result.
+func (b BigFloat) Add(other *BigFloat) (*BigFloat, error) {
 	lhsDecimal := b.decimal
 	rhsDecimal := other.decimal
 	deltaZeros := utils.Abs(b.Precision() - other.Precision())
@@ -102,10 +107,12 @@ func (b BigFloat) Add(other *BigFloat) *BigFloat {
 
 		newValue := rhsDecimal.String() + zeros
 
-		// INFO: We can ignore the error here because we know that the value is valid
-		// But we should probably handle it anyway
-		// TODO: Handle error, method definition should be changed to return an error
-		rhsDecimal, _ = NewBigInt(newValue)
+		var err error
+
+		rhsDecimal, err = NewBigInt(newValue)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	decimal := lhsDecimal.Add(rhsDecimal)
@@ -120,7 +127,11 @@ func (b BigFloat) Add(other *BigFloat) *BigFloat {
 	if decimal.Length() > lhsDecimal.Length() {
 		// Add carry to integer
 		// TODO: Handle error
-		oneBigInt, _ := NewBigInt("1")
+		oneBigInt, err := NewBigInt("1")
+		if err != nil {
+			return nil, err
+		}
+
 		integer = integer.Add(oneBigInt)
 
 		// Remove the carry value form the decimal and
@@ -131,7 +142,10 @@ func (b BigFloat) Add(other *BigFloat) *BigFloat {
 
 	newFloatValue := integerValue + "." + decimalValue
 
-	bigFloat, _ := NewBigFloat(newFloatValue)
+	bigFloat, err := NewBigFloat(newFloatValue)
+	if err != nil {
+		return nil, err
+	}
 
-	return bigFloat
+	return bigFloat, nil
 }

@@ -99,7 +99,11 @@ func TestNewBigFloatAdd(t *testing.T) {
 			bg1, _ := NewBigFloat(tc.lhs)
 			bg2, _ := NewBigFloat(tc.rhs)
 
-			bg := bg1.Add(bg2)
+			bg, err := bg1.Add(bg2)
+			if err != tc.err {
+				t.Errorf("got %v, want %v", err, tc.err)
+				return
+			}
 
 			if bg.String() != tc.want {
 				t.Errorf("got %v, want %v", bg, tc.want)
