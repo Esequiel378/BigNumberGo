@@ -139,8 +139,7 @@ func (b BigInt) Add(other *BigInt) *BigInt {
 
 		if carry {
 			// Remove the carry from the sum
-			// sum %= 10**b.chukSize
-			sum %= uint32(exponential)
+			sum %= exponential
 		}
 
 		// Store the sum in the result
