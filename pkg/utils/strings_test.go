@@ -108,3 +108,39 @@ func TestChunkStringFromRight(t *testing.T) {
 		})
 	}
 }
+
+func TestRemoveLeadingZeros(t *testing.T) {
+	tests := []struct {
+		input string
+		count int64
+		want  string
+	}{
+		{
+			input: "001234",
+			count: 2,
+			want:  "1234",
+		},
+		{
+			input: "000",
+			count: 3,
+			want:  "",
+		},
+		{
+			input: "1234",
+			count: 0,
+			want:  "1234",
+		},
+	}
+
+	for idx, tc := range tests {
+		testname := fmt.Sprintf("test#%d", idx)
+
+		t.Run(testname, func(t *testing.T) {
+			got, count := RemoveLeadingZeros(tc.input)
+
+			if got != tc.want || count != tc.count {
+				t.Errorf("got %v, %v, want %v, %v", got, count, tc.want, tc.count)
+			}
+		})
+	}
+}
