@@ -3,12 +3,21 @@ package bignumber
 import (
 	"regexp"
 	"strings"
+
+	"teladoc/pkg/utils"
 )
 
 // BigFloat is a decimal number with arbitrary precision.
 type BigFloat struct {
+	// integer is the integer part of the number
 	integer *BigInt
+	// decimal is the decimal part of the number
 	decimal *BigInt
+	// leadingZeros is the number of leading zeros in the decimal part
+	// Should be used to calculate the magnitude of the decimal part
+	leadingZeros string
+	// precision is the number of decimal places
+	precision int64
 }
 
 // InputNumberMatch is a regex that matches an integer or decimal number
@@ -29,11 +38,20 @@ func NewBigFloat(value string) (*BigFloat, error) {
 		return nil, ErrInvalidDecimalNumber
 	}
 
+	// Split integer and decimal parts
 	integer, decimal, found := strings.Cut(value, ".")
 	if !found {
 		return nil, ErrInvalidDecimalNumber
 	}
 
+	// INFO: this should be calculated before removing the leading zeros
+	precision := len(decimal)
+
+	// Compute the number of leading zeros in the decimal part and
+	// remove them to avoid zeros leading chunks
+	decimal, leadingZerosCount := utils.RemoveLeadingZeros(decimal)
+
+	// Create BigInts from integer and decimal parts
 	integerBigInt, err := NewBigInt(integer)
 	if err != nil {
 		return nil, err
@@ -44,9 +62,13 @@ func NewBigFloat(value string) (*BigFloat, error) {
 		return nil, err
 	}
 
+	leadingZeros := strings.Repeat("0", int(leadingZerosCount))
+
 	bigFloat := &BigFloat{
-		integer: integerBigInt,
-		decimal: decimalBigInt,
+		integer:      integerBigInt,
+		decimal:      decimalBigInt,
+		leadingZeros: leadingZeros,
+		precision:    int64(precision),
 	}
 
 	return bigFloat, nil
@@ -57,11 +79,13 @@ func (b BigFloat) String() string {
 	integer := b.integer.String()
 	decimal := b.decimal.String()
 
-	return integer + "." + decimal
+	return integer + "." + b.leadingZeros + decimal
 }
 
-func (b BigFloat) Add(other *BigFloat) *BigFloat {
-	integer := b.integer.Add(other.integer)
+// Precision returns the number of decimal places
+func (b BigFloat) Precision() int64 {
+	return b.precision
+}
 
 	lhsDecimal := b.decimal
 	rhsDecimal := other.decimal
