@@ -82,11 +82,70 @@ func TestChunkString(t *testing.T) {
 
 			if len(result) != len(tc.want) {
 				t.Errorf("got %v, want %v", result, tc.want)
+				return
 			}
 
 			for i := 0; i < len(result); i++ {
 				if result[i] != tc.want[i] {
 					t.Errorf("got %v, want %v", result, tc.want)
+				}
+			}
+		})
+	}
+}
+
+func TestChunkStringFromRight(t *testing.T) {
+	tests := []struct {
+		input string
+		size  int
+		want  []string
+	}{
+		{
+			input: "",
+			size:  10,
+			want:  []string{""},
+		},
+		{
+			input: "Hello world",
+			size:  10,
+			want:  []string{"H", "ello world"},
+		},
+		{
+			input: "4294967295",
+			size:  10,
+			want:  []string{"4294967295"},
+		},
+		{
+			input: "42949672954294967295",
+			size:  10,
+			want:  []string{"4294967295", "4294967295"},
+		},
+		{
+			input: "12347612074612984761239",
+			size:  10,
+			want:  []string{"123", "4761207461", "2984761239"},
+		},
+		{
+			input: "897712341234",
+			size:  10,
+			want:  []string{"89", "7712341234"},
+		},
+	}
+
+	for idx, tc := range tests {
+		testname := fmt.Sprintf("test#%d", idx)
+
+		t.Run(testname, func(t *testing.T) {
+			result := ChunkStringFromRight(tc.input, tc.size)
+
+			if len(result) != len(tc.want) {
+				t.Errorf("got %v, want %v", result, tc.want)
+				return
+			}
+
+			for i := 0; i < len(result); i++ {
+				if result[i] != tc.want[i] {
+					t.Errorf("got %v, want %v", result[i], tc.want[i])
 				}
 			}
 		})

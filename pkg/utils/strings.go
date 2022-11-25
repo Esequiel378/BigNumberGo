@@ -51,3 +51,28 @@ func ChunkString(value string, chunkSize int) []string {
 
 	return chunks
 }
+
+// ChunkStringFromRight breaks a string into chunks of a given size from the right.
+func ChunkStringFromRight(value string, chunkSize int) []string {
+	if len(value) <= chunkSize {
+		return []string{value}
+	}
+
+	var chunks []string
+
+	for end := len(value); end >= 0; end -= chunkSize {
+		start := end - chunkSize
+
+		if start < 0 {
+			start = 0
+		}
+
+		if start == end {
+			continue
+		}
+
+		chunks = append([]string{value[start:end]}, chunks...)
+	}
+
+	return chunks
+}
