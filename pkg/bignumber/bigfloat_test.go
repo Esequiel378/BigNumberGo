@@ -79,6 +79,18 @@ func TestNewBigFloatAdd(t *testing.T) {
 			err:  nil,
 		},
 		{
+			lhs:  "1234567.8901",
+			rhs:  "12.34",
+			want: "1234580.2301",
+			err:  nil,
+		},
+		{
+			lhs:  "2.345",
+			rhs:  "2345678901.2",
+			want: "2345678903.545",
+			err:  nil,
+		},
+		{
 			lhs:  "1239.91127612734",
 			rhs:  "1234.1",
 			want: "2474.01127612734",
