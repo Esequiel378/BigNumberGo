@@ -17,13 +17,12 @@ const maxUint32 = int64(^uint32(0))
 
 // RemoveLeadingZeros removes leading zeros from a string returning
 // the string without leading zeros and the count of leading zeros.
-// TODO: Add tests
 func RemoveLeadingZeros(value string) (string, int64) {
-	var leadingZerosCount int64
+	var count int64
 
 	for _, char := range value {
 		if char == '0' {
-			leadingZerosCount++
+			count++
 			continue
 		}
 
@@ -31,9 +30,9 @@ func RemoveLeadingZeros(value string) (string, int64) {
 	}
 
 	// Remove leading zeros from the decimal part to avoid zeros leading chunks
-	value = value[leadingZerosCount:]
+	value = value[count:]
 
-	return value, leadingZerosCount
+	return value, count
 }
 
 // StringToUint32 converts a string to uint32.
