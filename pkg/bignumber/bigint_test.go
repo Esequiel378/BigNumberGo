@@ -24,7 +24,7 @@ func TestNewBigInt(t *testing.T) {
 		{
 			input: "qwer",
 			want:  "",
-			err:   ErrInvalidIntegerNumber,
+			err:   ErrConvertingChunkToInteger,
 		},
 	}
 

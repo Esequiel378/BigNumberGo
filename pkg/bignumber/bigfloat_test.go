@@ -22,9 +22,20 @@ func TestNewBigFloat(t *testing.T) {
 			err:   nil,
 		},
 		{
+			input: "asdf.01",
+			want:  "",
+			err:   ErrConvertingChunkToInteger,
+		},
+		{
+			input: "01.asdf",
+			want:  "",
+			err:   ErrConvertingChunkToInteger,
+		},
+		{
+			// Will be splited into 1 1.2.3
 			input: "1.2.3",
 			want:  "",
-			err:   ErrInvalidDecimalNumber,
+			err:   ErrConvertingChunkToInteger,
 		},
 		{
 			input: "123",
@@ -38,8 +49,10 @@ func TestNewBigFloat(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.input, func(t *testing.T) {
+	for idx, tt := range tests {
+		testname := fmt.Sprintf("test#%d", idx)
+
+		t.Run(testname, func(t *testing.T) {
 			bg, err := NewBigFloat(tt.input)
 			if err != tt.err {
 				t.Errorf("got %v, want %v", err, tt.err)

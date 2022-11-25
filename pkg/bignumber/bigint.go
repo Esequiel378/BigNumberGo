@@ -2,7 +2,6 @@ package bignumber
 
 import (
 	"math"
-	"regexp"
 	"strconv"
 	"strings"
 
@@ -19,24 +18,12 @@ type BigInt struct {
 	chukSize int
 }
 
-// IntegerNumberMatch is a regex that matches an integer number (without decimal places)
-// Ex: 123, 123456789012345678901234567890
-//
-// [101 reference](https://regex101.com/r/3hoFC3/1)
-const IntegerNumberMatch = "^[0-9]+$"
-
 // NewBigInt creates a new BigInt from a string
 // The string must be a valid integer number
 // and must not contain any decimal places
 //
 // Ex: 123, 123456789012345678901234567890, etc.
 func NewBigInt(value string) (*BigInt, error) {
-	// Validate input value
-	match, err := regexp.MatchString(IntegerNumberMatch, value)
-	if !match || err != nil {
-		return nil, ErrInvalidIntegerNumber
-	}
-
 	// Break the string into chunks of 8 digits
 	// Breaking in chunks of 8 digits allows us to use uint32
 	// to store and perform the addition operation on the number

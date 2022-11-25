@@ -1,7 +1,6 @@
 package bignumber
 
 import (
-	"regexp"
 	"strings"
 
 	"teladoc/internal/utils"
@@ -20,24 +19,12 @@ type BigFloat struct {
 	precision int64
 }
 
-// InputNumberMatch is a regex that matches an integer or decimal number
-// Ex: 123, 123.456, 123.456789
-//
-// [101 reference](https://regex101.com/r/8w9NWG/1)
-const InputNumberMatch = "^[0-9]*[.][0-9]+?$"
-
 // NewBigFloat creates a new BigFloat from a string
 // The string must be a valid integer number
 // and must contain decimal places
 //
 // Ex: 123.3, 123456789012345678901234567890.1123123, etc.
 func NewBigFloat(value string) (*BigFloat, error) {
-	// Validate input value
-	match, err := regexp.MatchString(InputNumberMatch, value)
-	if !match || err != nil {
-		return nil, ErrInvalidDecimalNumber
-	}
-
 	// Split integer and decimal parts
 	integer, decimal, found := strings.Cut(value, ".")
 	if !found {
