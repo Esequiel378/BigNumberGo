@@ -23,6 +23,8 @@ go test ./...
 go test -coverpkg=./... ./...
 ```
 
+_**The `AddNumbers` function can is located in the [bignumber.go](https://github.com/Esequiel378/teladoc-take-home-exercise/blob/d2d50a75f41d21b6458f5031774f71b5e6ed0cfe/pkg/bignumber/bignumber.go#L36) file, within the `pkg` directory**_
+
 #### Solution 1: Naive approach
 
 This approach will solve the problem by doing a basic right-to-left sum of each individual digit, handling the
