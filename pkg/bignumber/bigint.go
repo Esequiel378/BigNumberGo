@@ -94,6 +94,7 @@ func (b BigInt) Add(other *BigInt) *BigInt {
 	// Create a new BigInt to hold the result
 	result := &BigInt{
 		magnitude: make([]uint32, len(lhs)),
+		length:    1,
 	}
 
 	// Siplify the addition for single chuck setup
@@ -153,6 +154,9 @@ func (b BigInt) Add(other *BigInt) *BigInt {
 		copy(newMagnitude[1:], result.magnitude)
 		result.magnitude = newMagnitude
 	}
+
+	// TODO: Investigate if we can compute the length while computing the sum
+	result.length = len(result.String())
 
 	return result
 }
