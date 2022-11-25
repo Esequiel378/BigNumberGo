@@ -17,6 +17,11 @@ func TestNewBigFloat(t *testing.T) {
 			err:   nil,
 		},
 		{
+			input: "1.01",
+			want:  "1.01",
+			err:   nil,
+		},
+		{
 			input: "1.2.3",
 			want:  "",
 			err:   ErrInvalidDecimalNumber,
