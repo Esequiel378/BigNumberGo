@@ -1,6 +1,6 @@
-# Teladoc - Take-Home Exercise
+# BigNumberGo
 
-> You can find the problem description in the [Exercise.md](./Exercise.md) file
+> An implementation to work with numbers with arbitrary size (Like Java BigNumber). You can find the problem description in the [Exercise.md](./Exercise.md) file
 
 ### 👷 CI - Continuous Integration
 
